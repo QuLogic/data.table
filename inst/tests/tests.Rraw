@@ -10342,7 +10342,7 @@ test(1729.05, nrow(DT), 507L)
 
 options(datatable.verbose = FALSE) # capture.output() exact tests must not be polluted with verbosity
 x = capture.output(fwrite(DT,na="NA"))[-1]   # -1 to remove the column name V1
-y = capture.output(write.csv(DT,row.names=FALSE,quote=FALSE))[-1]
+y = gsub("\\.?0+e", "e", capture.output(write.csv(DT,row.names=FALSE,quote=FALSE))[-1])
 # One mismatch that seems to be accuracy in base R's write.csv
 # tmp = cbind(row=1:length(x), `fwrite`=x, `write.csv`=y)
 # tmp[x!=y,]
@@ -10388,12 +10388,12 @@ if (isTRUE(LD<-capabilities()["long.double"])) {  #3258
   cat('Skipped test 1729.9 due to capabilities()["long.double"] ==', LD, '\n')
 }
 test(1729.10, fwrite(DT,na=""), output=ans)
-test(1729.11, write.csv(DT,row.names=FALSE,quote=FALSE), output=ans)
+test(1729.11, gsub("\\.?0+e", "e", capture.output(write.csv(DT,row.names=FALSE,quote=FALSE))), ans)
 DT = data.table(unlist(.Machine[c("double.eps","double.neg.eps","double.xmin","double.xmax")]))
 #    double.eps double.neg.eps    double.xmin    double.xmax
 #  2.220446e-16   1.110223e-16  2.225074e-308  1.797693e+308
 test(1729.12, typeof(DT[[1L]]), "double")
-test(1729.13, capture.output(fwrite(DT)), capture.output(write.csv(DT,row.names=FALSE,quote=FALSE)))
+test(1729.13, capture.output(fwrite(DT)), gsub("\\.?0+e", "e", capture.output(write.csv(DT,row.names=FALSE,quote=FALSE))))
 
 if (test_bit64) {
   test(1730.1, typeof(-2147483647L), "integer")
