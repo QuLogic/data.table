@@ -8,6 +8,8 @@
 
 ## BUG FIXES
 
+1. `fread` improves handling of very small (<1e-300) or very large (>1e+300) floating point numbers on non-x86 architectures (specifically ppc64le and armv7hl). Thanks to @QuLogic for reporting and fixing, [PR#4165](https://github.com/Rdatatable/data.table/pull/4165).
+
 ## NOTES
 
 
